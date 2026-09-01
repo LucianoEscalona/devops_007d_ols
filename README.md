@@ -5,7 +5,11 @@
 
 Para la realizacion de este trabajo, se opto por utilizar **Git Flow**, ya que se considera como la mejor opcion para realizar proyectos de manera colaboratiba, al tener una estructura con ramas dedicadas a cada cualidad de la aplicacion, y al permitir hacer releases de manera mas rapida y sencilla. 
 
-Otra razon por la que se utilizo Git Flow, es porque en el mercado este metodo de trabajo se utiliza bastante, por lo que podemos practicar con este proyecto.
+
+
+## Por que utilizar git flow?
+
+Se decidio utilizar esta tecnica, porque en el mercado este metodo de trabajo se utiliza bastante, por lo que podemos practicar con este proyecto. Ademas, al ser pensado para trabajar de manera colaborativa, agiliza el desarrollo y facilita los cambios y modificaciones, al trabajar en ramas especificas para cada funcion, ademas que **git flow release** y **git flow hotfix** nos permite subir cambios a main de manera sencilla y corregir errores rapidamente.
 
 ## Flujo del proyecto
 
@@ -34,3 +38,12 @@ El pipeline realizado simplemente compila e instala las dependencias necesarias 
 En cada paso o step, comienza haciendo un checkout del codigo, posteriormente instala java 17 (para los backend) o node.js (para el frontend).
 
 Despues se compila el codigo y de momento, se saltan los tests para que esto sea mas rapido y no tan complejo.
+
+## Tecnologias utilizadas
+
+- Java
+- Node.js
+- React
+- Github
+- Github actions
+- Docker
