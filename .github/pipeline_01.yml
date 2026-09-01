@@ -1,0 +1,68 @@
+name: Pipeline 01
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  
+  instalacion-backend-despacho:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: './back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO/pom.xml'
+
+      - name: Ejecutar Tests y Compilar Backend Despacho
+        run: |
+          cd ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+          chmod +x mvnw || true
+          ./mvnw clean compile -DskipTests
+
+  instalacion-backend-ventas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: './back-Ventas_SpringBoot/Springboot-API-REST/pom.xml'
+
+      - name: Ejecutar Tests y Compilar Backend Ventas
+        run: |
+          cd ./back-Ventas_SpringBoot/Springboot-API-REST
+          chmod +x mvnw || true
+          ./mvnw clean compile -DskipTests
+
+  instalacion-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar dependencias y Validar Frontend
+        run: |
+          cd ./front_despacho
+          npm install
+          npm run lint
