@@ -39,8 +39,37 @@ En cada paso o step, comienza haciendo un checkout del codigo, posteriormente in
 
 Despues se compila el codigo y de momento, se saltan los tests para que esto sea mas rapido y no tan complejo.
 
-## Tecnologias utilizadas
+## Docker
 
+Lo mas reciente que se ha implementado en el repositorio, es el uso de contenedores Docker. Un contenedor, permite ejecutar sistemas en entornos aislados con todas las dependencias necesarias para garantizar su correcto funcionamiento, esto a traves de archivos Dockerfile y docker-compose.
+
+**A continuacion, se explicara que hace cada archivo:**
+
+**Dockerfile (Backend despacho):**
+- Este archivo se divide en 2 Stages.
+- En el pprimero, se configura y se copia el directorio proyecto y el archivo pom.xml en el directorio de trabajo /build (se ocupa maven 3.9) y se ejecuta "mvn clean package -DskipTests" para limpiar el proyecto y saltarse los tests.
+- En el segundo stage, se configura el contenedor para ejecutar el proyecto y exponerlo al puerto 8080 (utilizando eclipse-temurin con java 21).
+- Tambien se cuenta con un archivo Docker.ignore que ignora los archivos de configuracion locales, dependencias locales, control de versiones y sistema de build y archivos temporales.
+
+**Dockerfile (Backend ventas):**
+- Es igual que el archivo antes mencionado, consta de 2 Stages.
+- El primero copia el proyecto y el pom.xml y limpia y se salta los tests.
+- El segundo ejecuta y expone el proyecto al puerto 8081.
+- Cuenta igualmente con un Docker.ignore, y este hace lo mismo que el anteriormente menciaonado.
+
+**Dockerfile (Frontend):**
+- Consta de 2 Stages.
+- Primero se configura node 20 y se setea el directorio de trabajo, posteriormente, se copia el archivo package.json (el de las dependencias), se instala node en el contenedor y se copia el proyecto, despues se ejecuta con el comando "npm run build".
+- El segundo stage se encarga de instalar nginx y copiar el servidor web, para posteriormente, subir el proyeco a este y exponerlo al puerto 80.
+
+**docker-compose:**
+- El docker compose, es el que se encarga de levantar todos los contenedores a traves de un unico archivo, el mio se divide en 4 servicios:
+- mysql: se descarga una imagen y se levanta una base de datos, se expone al puerto 3306 y utiliza un volumen mysql_data. Cuenta con un healthcheck  para asegurarnos de que el contenedor funcione correctamente.
+- back_ventas: se construye el proyecto y se expone al puerto 8081, se configuran las variables de ambiente que definen donde esta la BDD y que usuario y contraseña usar, depende de que el contenedor de mysql haya iniciado y que tenga un estado "healthy".
+- back_despachos: similar a back_ventas, se construye, se expone (8080:8080) y se configura las variables de ambiente para la BDD (url, username, password) y depende de que mysql tenga un service_healthy.
+- frontend: simplemente se constuye el frontend y se expone 3000:80, depende de que los servicios de backend_ventas y backend_despachos terminen.
+
+## Tecnologias utilizadas
 - Java
 - Node.js
 - React
