@@ -34,6 +34,11 @@ public class UsuarioService {
         return null;
     };
     
+    public Usuario u_recuperar_nl(Integer id){
+        /*-LOGICA NEGOCIO-*/
+        return rep.findById(id).orElse(null);
+    };
+    
     public List<Usuario> u_listar(){
         /*-LOGICA NEGOCIO-*/
         return rep.findAll();
