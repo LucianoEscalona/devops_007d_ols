@@ -1,10 +1,10 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-innovatech
+    container_name: base_de_datos
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
     ports:
       - "3306:3306"
     volumes:
@@ -15,40 +15,40 @@ services:
       timeout: 5s
       retries: 5
 
-  back_ventas:
-    build: ./back-Ventas_Springboot/Springboot-API-REST
-    container_name: back-ventas
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_NAME}
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    depends_on:
-      mysql:
-        condition: service_healthy
-    
-  back_despachos:
-    build: ./back-Despachos_Springboot/Springboot-API-REST-DESPACHO
-    container_name: back-despachos
+  back_usuarios:
+    build: ./usuario
+    container_name: usuarios
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_NAME}
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASS}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    
+  back_productos:
+    build: ./producto
+    container_name: productos
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASS}
     depends_on:
       mysql:
         condition: service_healthy
 
   frontend:
-    build: ./front_despacho
+    build: ./frontend
     container_name: frontend
     ports:
       - "3000:80"
     depends_on:
-      - back_ventas
-      - back_despachos
+      - back_usuarios
+      - back_productos
       
 volumes:
   mysql_data:
