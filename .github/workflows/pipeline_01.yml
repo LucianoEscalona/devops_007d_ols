@@ -10,11 +10,11 @@ on:
 
 jobs:
   
-  instalacion-backend-despacho:
+  instalacion-backend-producto:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Configurar JDK 17
         uses: actions/setup-java@v3
@@ -22,15 +22,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
-          cache-dependency-path: './back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO/pom.xml'
+          cache-dependency-path: './producto/pom.xml'
 
-      - name: Ejecutar Tests y Compilar Backend Despacho
+      - name: Ejecutar Tests y Compilar Backend producto
         run: |
-          cd ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+          cd ./producto
           chmod +x mvnw || true
           ./mvnw clean compile -DskipTests
 
-  instalacion-backend-ventas:
+  instalacion-backend-usuario:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
@@ -42,11 +42,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
-          cache-dependency-path: './back-Ventas_SpringBoot/Springboot-API-REST/pom.xml'
+          cache-dependency-path: './usuario/pom.xml'
 
-      - name: Ejecutar Tests y Compilar Backend Ventas
+      - name: Ejecutar Tests y Compilar Backend usuario
         run: |
-          cd ./back-Ventas_SpringBoot/Springboot-API-REST
+          cd ./usuario
           chmod +x mvnw || true
           ./mvnw clean compile -DskipTests
 
@@ -61,8 +61,8 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Instalar dependencias y Validar Frontend
+      - name: Instalar dependencias y Validar frontend
         run: |
-          cd ./front_despacho
+          cd ./frontend
           npm install
           npm run lint
