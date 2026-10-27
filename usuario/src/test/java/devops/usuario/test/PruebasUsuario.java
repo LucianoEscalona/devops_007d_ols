@@ -1,66 +1,102 @@
 package devops.usuario.test;
 
-import devops.usuario.controller.UsuarioController;
+import devops.usuario.service.UsuarioService;
 import devops.usuario.entity.Usuario;
 import devops.usuario.repository.UsuarioRepository;
+
+
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class PruebasUsuario {
     
     @Mock
     private UsuarioRepository rep;
+
     @InjectMocks
-    private UsuarioController ctrl;
-    
-    @DisplayName("Probamos que el controler llame al repositorio para recuperar un USUARIO")
-    @Test
-    public void ProbarGET(){
-        Usuario u = new Usuario();
-        u.setNombre("Pedro");
-        
-        when(rep.findById(1)).thenReturn(Optional.of(u));
-        
-        Usuario res = ctrl.uc_recuperar_nl(1);
-        
-        Assertions.assertEquals("Pedro", res.getNombre());
+    private UsuarioService service;
+
+    private Usuario usuario;
+
+    @BeforeEach
+    void preparar() {
+        usuario = new Usuario(1, "Pedro", "Diaz", "correo@gmail.com","pass","normal");
     }
-    
-    @DisplayName("Probamos que el controler llame al repositorio para modificar un USUARIO")
+
     @Test
-    public void ProbarPUT(){
-        Usuario u = new Usuario();
-        u.setNombre("Pedro");
-        
-        Usuario d_nuevos = new Usuario();
-        d_nuevos.setNombre("Juan");
-        
-        when(rep.findById(1)).thenReturn(Optional.of(u));
-        when(rep.save(any(Usuario.class))).thenAnswer(i->i.getArgument(0));
-        
-        Usuario res = ctrl.uc_modificar(d_nuevos);
-        
-        Assertions.assertEquals("Juan", res.getNombre());
+    void guardarUsuario() {
+        when(rep.save(usuario)).thenReturn(usuario);
+
+        Usuario resultado = service.u_guardar(usuario);
+
+        assertNotNull(resultado);
+        assertEquals("Pedro", resultado.getNombre());
     }
-    
-    @DisplayName("Probamos que el controler llame al repositorio para eliminar un USUARIO")
+
     @Test
-    public void ProbarDELETE(){
-        when(rep.existsById(1)).thenReturn(true);
-        Boolean res = ctrl.uc_eliminar(1);
-        
-        Assertions.assertEquals(true, res.booleanValue());
-        
+    void recuperarUsuarioExistente() {
+        when(rep.findById(1)).thenReturn(Optional.of(usuario));
+
+        Usuario resultado = service.u_recuperar_nl(1);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getId());
+    }
+
+    @Test
+    void recuperarUsuarioInexistente() {
+        when(rep.findById(99)).thenReturn(Optional.empty());
+
+        Usuario resultado = service.u_recuperar_nl(99);
+
+        assertNull(resultado);
+    }
+
+    @Test
+    void listarUsuarios() {
+        when(rep.findAll()).thenReturn(Arrays.asList(usuario));
+
+        var resultado = service.u_listar();
+
+        assertEquals(1, resultado.size());
+        assertEquals("Pedro", resultado.get(0).getNombre());
+    }
+
+    @Test
+    void modificarUsuarioExistente() {
+        Usuario cambios = new Usuario(1, "Roberto", "Gomez", "corre2o@gmail.com","word","admin");
+
+        when(rep.findById(1)).thenReturn(Optional.of(usuario));
+        when(rep.save(usuario)).thenReturn(usuario);
+
+        Usuario resultado = service.u_modificar(cambios);
+
+        assertNotNull(resultado);
+        assertEquals("Roberto", resultado.getNombre());
+        assertEquals("corre2o@gmail.com", resultado.getCorreo());
+        assertEquals("word", resultado.getContrasenia());
+    }
+
+    @Test
+    void eliminarProducto() {
+        Boolean resultado = service.u_eliminar(1);
+
+        assertTrue(resultado);
         verify(rep).deleteById(1);
     }
 }
