@@ -93,15 +93,15 @@ jobs:
       matrix:
         include:
           - project: Producto
-            directory: ./producto
+            directory: producto
             manifest: pom.xml
 
           - project: Usuario
-            directory: ./usuario
+            directory: usuario
             manifest: pom.xml
 
           - project: Frontend
-            directory: ./frontend
+            directory: frontend
             manifest: package.json
 
     steps:
