@@ -31,10 +31,11 @@ jobs:
           ./mvnw clean verify 
 
       - name: Subir reporte JaCoCo
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
+          name: jacoco-report-producto
           path: ./producto/target/site/jacoco
+          if-no-files-found: warn
 
   instalacion-backend-usuario:
     runs-on: ubuntu-latest
@@ -57,24 +58,27 @@ jobs:
           ./mvnw clean verify  
           
       - name: Subir reporte JaCoCo
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
+          name: jacoco-report-usuario
           path: ./usuario/target/site/jacoco
+          if-no-files-found: warn
 
   instalacion-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
 
       - name: Instalar dependencias y Validar frontend
         run: |
           cd ./frontend
-          npm install
+          npm ci
           npm run lint
