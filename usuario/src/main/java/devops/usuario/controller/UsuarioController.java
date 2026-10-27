@@ -32,6 +32,11 @@ public class UsuarioController {
         return ser.u_recuperar(u);
     };
     
+    @GetMapping("/get/{id}")
+    public Usuario uc_recuperar_nl(@PathVariable Integer id){
+        return ser.u_recuperar_nl(id);
+    };
+    
     @GetMapping("/list")
     public List<Usuario> uc_listar(){
         return ser.u_listar();

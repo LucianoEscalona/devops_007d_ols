@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configurar JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -28,7 +28,13 @@ jobs:
         run: |
           cd ./producto
           chmod +x mvnw || true
-          ./mvnw clean compile -DskipTests
+          ./mvnw clean verify 
+
+      - name: Subir reporte JaCoCo
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: ./producto/target/site/jacoco
 
   instalacion-backend-usuario:
     runs-on: ubuntu-latest
@@ -48,7 +54,13 @@ jobs:
         run: |
           cd ./usuario
           chmod +x mvnw || true
-          ./mvnw clean compile -DskipTests
+          ./mvnw clean verify  
+          
+      - name: Subir reporte JaCoCo
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: ./usuario/target/site/jacoco
 
   instalacion-frontend:
     runs-on: ubuntu-latest
