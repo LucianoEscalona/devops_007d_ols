@@ -11,6 +11,7 @@ RUN npm run build
 
 # Stage 2
 FROM nginx:alpine
+LABEL org.opencontainers.image.source="https://github.com/LucianoEscalona/devops_007d_ols"
 COPY --from=builder /build/dist /usr/share/nginx/html
 
 EXPOSE 80
