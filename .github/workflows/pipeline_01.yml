@@ -249,3 +249,50 @@ jobs:
             -Dsonar.projectKey=lucianoescalona_devops_007d_ols_FRONTEND
             -Dsonar.organization=lucianoescalona
             -Dsonar.host.url=https://sonarcloud.io
+
+  construir-imagenes:
+    name: Construccion y publicacion de imagenes
+    runs-on:  ubuntu-latest
+    if: github.event_name == 'push'
+
+    permissions:
+      contents: read
+      packages: write
+
+    needs:
+      - instalacion-backend-producto
+      - instalacion-backend-usuario
+      - instalacion-frontend
+      - snyk-scan
+      - sonar-scan-producto
+      - sonar-scan-usuario
+      - sonar-scan-frontend
+      
+    steps:
+      - name: Checkout del codigo
+        uses: actions/checkout@v4
+      
+      - name: Iniciar sesión en GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir imagen de producto
+        run: |
+          docker build -t ghcr.io/lucianoescalona/producto:1.0 ./producto
+
+      - name: Construir imagen de usuario
+        run: |
+          docker build -t ghcr.io/lucianoescalona/usuario:1.0 ./usuario
+
+      - name: Construir imagen de frontend
+        run: |
+          docker build -t ghcr.io/lucianoescalona/frontend:1.0 ./frontend
+
+      - name: Publicar imágenes en GHCR
+        run: |
+          docker push ghcr.io/lucianoescalona/producto:1.0
+          docker push ghcr.io/lucianoescalona/usuario:1.0
+          docker push ghcr.io/lucianoescalona/frontend:1.0
