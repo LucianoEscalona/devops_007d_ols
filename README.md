@@ -69,6 +69,19 @@ Lo mas reciente que se ha implementado en el repositorio, es el uso de contenedo
 - back_despachos: similar a back_ventas, se construye, se expone (8080:8080) y se configura las variables de ambiente para la BDD (url, username, password) y depende de que mysql tenga un service_healthy.
 - frontend: simplemente se constuye el frontend y se expone 3000:80, depende de que los servicios de backend_ventas y backend_despachos terminen.
 
+## Registro en GHCR.io
+- Para esta evaluacion, se registraron las imagenes en Github container registry, esto con el objetivo de poder permitirle a las personas descargar las imagenes de manera sencilla.
+- Esto se logra construyendo la imagen con una tag especifica, despues la asociamos a la tag de ghcr.io, y por ultimo, la subimos con push.
+
+## Test realizados
+- Se realizaron unos cuantos test unitarios, simples, no muy complejos, en ambos microservicios, estos tests ademas, se ejecutan automaticamente en el pipeline.
+
+## Snyk y SonarCloud
+- En esta evaluacion, se implemento Snyk conjunto a SonarCloud, para realizar escaneos sobre el proyecto.
+- Snyk se encarga de escanear las dependencias, identificando vulnerabilidades y fallos que puedan comprometer a la aplicacion, ademas, este reporte despues se guarda para su posterior revision.
+- SonarCloud se encarga de revisar el codigo, la cobertura de las pruebas, calidad de este y la complejidad ciclomatica, estos resultados, se guardan en la pagina de sonarCloud, en donde se documentan los hallazgos encontrados por el analisis.
+
+
 ## Tecnologias utilizadas
 - Java
 - Node.js
