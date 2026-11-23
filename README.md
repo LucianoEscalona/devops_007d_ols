@@ -81,6 +81,39 @@ Lo mas reciente que se ha implementado en el repositorio, es el uso de contenedo
 - Snyk se encarga de escanear las dependencias, identificando vulnerabilidades y fallos que puedan comprometer a la aplicacion, ademas, este reporte despues se guarda para su posterior revision.
 - SonarCloud se encarga de revisar el codigo, la cobertura de las pruebas, calidad de este y la complejidad ciclomatica, estos resultados, se guardan en la pagina de sonarCloud, en donde se documentan los hallazgos encontrados por el analisis.
 
+---
+
+## IMPORTANTE
+
+Debido a la falta de permisos en AWS, no se pudo realizar de manera practica algunas cosas establecidas por el docente, por lo que se hablara de estas de manera teorica y buscando mas que nada, explicar por que se deberian usar y que beneficios trae al desarrollo de algun proyecto, sin mas que agregar, a continuacion, la explicacion del Monitoreo.
+
+---
+## Service mesh y orquestación
+
+- *¿Qué es un Service Mesh?:* Explicado de manera sencilla, es una capa de infraestructura que permite, gestiona y supervisa la comunicación entre servicios de una aplicación, útil para sistemas basados en microservicios en donde existe comunicación entre estos.
+
+- *Kubernetes:* Es un orquestador de contenedores, el cual permite automatizar despliegues, escalados y la gestión de los contenedores, en nuestro caso es útil, al contar con múltiples contenedores (producto, usuario, frontend), permitiéndonos gestionarlos de manera más sencilla y ordenada.
+
+- *Istio:* Podríamos describirlo como un añadido al service mesh, Istio ofrece seguridad en las conexiones, además de permitir monitorear la comunicación entre estos, habitualmente trabaja sobre Kubernetes. Sobra decir que es útil para dar más protección en la comunicación de los microservicios
+
+## Monitoreo del sistema
+
+En este proyecto, se utilizará cloudwatch conjunto a prometheus y kiali, para obtener un monitoreo completo de nuestro sistema.
+
+- *Cloudwatch:* es una herramienta de AWS, la cual permite monitorear y obtener métricas respecto a las distintas instancias que tengamos creadas o los recursos que estemos utilizando (siempre y cuando configuremos dichos recursos para que ocupen cloudwatch). Su propósito es el de proporcionar métricas relevantes que ayuden a la hora de tomar decisiones, como por ejemplo: Gasto de la CPU, errores que se generen, Memoria usada, Tiempos de despliegue, etc... Todas estas métricas proporcionan información relevante para ver cómo rinde nuestro sistema en un entorno de producción, ayudándonos a detectar debilidades y áreas de mejora en nuestros componentes.
+
+- *Prometheus:* prometheus es una herramienta que permite supervisar las aplicaciones, sistemas y servicios que uno posea, es de código abierto y almacena las métricas para poder generar alertas o paneles de control. Se usa en el proyecto ya que al almacenar métricas, nos permite consultarlas posteriormente para evaluar y planificar qué acciones hacer en el futuro.
+
+- *Kiali:* Kiali es una herramienta que permite ver cómo se comunican nuestros microservicios desplegados en Istio de manera más gráfica, mostrando en pantalla las comunicaciones que se generan, muy útil para ver fácilmente cómo es el flujo de nuestro sistema.
+
+## Como se integran al proyecto?:
+- (Recordar que no se pudo usar Cloudwatch y similares por falta de permisos, asi que hablare solo de Kubernetes Istio y los manifiestos) Para integrar Kubernetes e Istio al proyecto, se generaron una serie de mainifiestos (archivos yaml) los cuales configuran los entornos de Kubernetes e Istio.
+- Para usar estsos manifiestos, es necesarios movernos a la carpeta de nuestro proyecto y entrar a la carpeta de Kubernetes donde se encuentran los archivos yaml, para despues hacer *kubectl apply -f "archivo_yaml"*.
+
+## Como nos permite tomar desiciones tecnicas?:
+- El recolectar metricas, estas nos permiten ver el rendimiento y comportamiento general del sistema, dandonos la posibilidad de revisar estos datos y tomar decisiones, como por ejemplo: subirle mas CPU a un microservicio en especifico, o al contrario, bajarle la CPU ya que tiene de sobra, permitiendo distribuir recursos.
+- Tener Kiali para ver como se comunican los microservicios, nos da la posibiliad de indentificar anomalias (por ejemplo, un servicio se comunica con otro, pero estos dos no deberian comunicarse entre ellos).
+- El service mesh y la orquestacion, conjunto a Istio, nos permite tener una comunicacion mas realista (en sentido que se ocupa en la vida real) y tener mayor control sobre esta, permitiendo permitir o denegar conexiones y configurar despliegues y gestion de recursos.
 
 ## Tecnologias utilizadas
 - Java
