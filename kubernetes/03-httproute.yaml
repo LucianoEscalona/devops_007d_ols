@@ -1,0 +1,36 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: devops_ols_route
+  namespace: devops_ols
+spec:
+  parentRefs:
+    - name: bookinfo-gateway
+      namespace: default
+      sectionName: http
+  # hostnames:
+  #   - api.midominio.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: frontend
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/usuario
+      backendRefs:
+        - name: usuario
+          port: 8080
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/producto
+      backendRefs:
+        - name: producto
+          port: 8081

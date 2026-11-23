@@ -1,0 +1,19 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: devops_ols_istio
+  namespace: devops_ols
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/devops_ols/sa/contenedor_usuario
+              - cluster.local/ns/devops_ols/sa/contenedor_producto
+      to:
+        - operation:
+            ports: ["3306"]
