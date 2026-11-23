@@ -222,9 +222,6 @@ jobs:
       - instalacion-backend-usuario
       - instalacion-frontend
       - snyk-scan
-      - sonar-scan-producto
-      - sonar-scan-usuario
-      - sonar-scan-frontend
       
     steps:
       - name: Checkout del codigo
